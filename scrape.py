@@ -33,11 +33,11 @@ def scrape_bounties_live():
         res.raise_for_status()
         print("✅ Live data fetched successfully")
 
-        # 💾 Optional: Save to file
-        with open("firecrawl_response.json", "w", encoding="utf-8") as f:
-            import json
-            json.dump(res.json(), f, ensure_ascii=False, indent=2)
-            print("💾 Response saved to firecrawl_response.json")
+        # # 💾 Optional: Save to file
+        # with open("firecrawl_response.json", "w", encoding="utf-8") as f:
+        #     import json
+        #     json.dump(res.json(), f, ensure_ascii=False, indent=2)
+        #     print("💾 Response saved to firecrawl_response.json")
 
         return res.json()
 
