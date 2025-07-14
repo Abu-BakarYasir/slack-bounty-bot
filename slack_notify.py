@@ -26,9 +26,10 @@ def send_to_slack(bounty):
         print(f"❌ Slack Error: {response.status_code}")
         print(response.text)
 
-if __name__ == "__main__":
-    from process import extract_bounties, get_top_bounty
-    bounties = extract_bounties()
-    top = get_top_bounty(bounties)
-    if top:
-        send_to_slack(top)
+# Remove this part if not running via main() with firecrawl data
+# if __name__ == "__main__":
+#     from process import extract_bounties_from_data, get_top_bounty
+#     bounties = extract_bounties_from_data(...)  # Requires firecrawl_json input
+#     top = get_top_bounty(bounties)
+#     if top:
+#         send_to_slack(top)
