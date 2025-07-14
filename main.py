@@ -1,7 +1,7 @@
 # main.py (dynamic flow)
 
 from scrape import scrape_bounties_live
-from process import extract_bounties_with_time, get_top_bounty
+from process import extract_bounties_with_time, get_top_bounties
 from slack_notify import send_to_slack
 
 def run_dynamic_bot():
@@ -17,9 +17,10 @@ def run_dynamic_bot():
         print("⚠️ No bounties found, aborting.")
         return
 
-    top = get_top_bounty(bounties)
+    top = get_top_bounties(bounties)
     if top:
-        send_to_slack(top)
+        for bounty in top:
+            send_to_slack(bounty)
 
 
 if __name__ == "__main__":
