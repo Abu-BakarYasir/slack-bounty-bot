@@ -1,28 +1,125 @@
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fexamples%2Ftree%2Fmain%2Fpython%2Fflask3&demo-title=Flask%203%20%2B%20Vercel&demo-description=Use%20Flask%203%20on%20Vercel%20with%20Serverless%20Functions%20using%20the%20Python%20Runtime.&demo-url=https%3A%2F%2Fflask3-python-template.vercel.app%2F&demo-image=https://assets.vercel.com/image/upload/v1669994156/random/flask.png)
+# 🚀 Replit Bounty Notifier
 
-# Flask + Vercel
+This Python microservice dynamically scrapes **open bounties** from [Replit Bounties](https://replit.com/bounties), filters the **most valuable** ones posted in the last 24 hours, and sends a **Slack notification** to your channel.
 
-This example shows how to use Flask 3 on Vercel with Serverless Functions using the [Python Runtime](https://vercel.com/docs/concepts/functions/serverless-functions/runtimes/python).
+✅ Deployed as a Flask API on **Vercel**, so you can trigger it from CRON jobs or external services.
 
-## Demo
+---
 
-https://flask-python-template.vercel.app/
+### 📦 Project Structure
 
-## How it Works
-
-This example uses the Web Server Gateway Interface (WSGI) with Flask to enable handling requests on Vercel with Serverless Functions.
-
-## Running Locally
-
-```bash
-npm i -g vercel
-vercel dev
 ```
 
-Your Flask application is now available at `http://localhost:3000`.
+.
+├── main.py                # Dynamic bot flow (scrape → filter → notify)
+├── scrape.py              # Firecrawl API integration
+├── slack\_notify.py        # Send messages to Slack
+├── process.py             # Parse and filter bounty data
+├── app.py                 # Flask app with /run-bot endpoint
+├── .env                   # Secrets (ignored)
+├── .gitignore
+└── README.md
 
-## One-Click Deploy
+````
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=vercel-examples):
+---
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fexamples%2Ftree%2Fmain%2Fpython%2Fflask3&demo-title=Flask%203%20%2B%20Vercel&demo-description=Use%20Flask%203%20on%20Vercel%20with%20Serverless%20Functions%20using%20the%20Python%20Runtime.&demo-url=https%3A%2F%2Fflask3-python-template.vercel.app%2F&demo-image=https://assets.vercel.com/image/upload/v1669994156/random/flask.png)
+### ⚙️ Setup
+
+#### 1️⃣ Clone & install dependencies
+
+```bash
+git clone https://github.com/yourusername/replit-bounty-notifier.git
+cd replit-bounty-notifier
+pip install -r requirements.txt
+````
+
+#### 2️⃣ Create `.env` file
+
+```ini
+FIRECRAWL_API_KEY=your_firecrawl_api_key
+SLACK_WEBHOOK_URL=your_slack_webhook_url
+CRON_SECRET=your_secret_token  # optional, for securing the /run-bot endpoint
+```
+
+---
+
+### 🧪 Run locally
+
+```bash
+python app.py
+```
+
+Then visit:
+
+```
+http://127.0.0.1:5000/run-bot
+```
+
+> If you set `CRON_SECRET`, include in header:
+>
+> ```
+> Authorization: Bearer your_secret_token
+> ```
+
+---
+
+### 🌐 Deploy to Vercel
+
+1. Push your project to GitHub
+2. Connect the repo on [Vercel](https://vercel.com)
+3. Add environment variables in Vercel dashboard:
+
+   * `FIRECRAWL_API_KEY`
+   * `SLACK_WEBHOOK_URL`
+   * `CRON_SECRET` (optional)
+4. Deploy 🚀
+
+After deployment, your bot will run when you visit:
+
+```
+https://your-vercel-project.vercel.app/run-bot
+```
+
+---
+
+### 📜 How it works
+
+* `scrape.py`: Fetches live bounties from Firecrawl API as Markdown
+* `process.py`: Parses title, price, posted time, description, etc.
+* Filters bounties posted within last 24 hours
+* Finds the highest priced bounty
+* `slack_notify.py`: Formats and sends message to Slack
+
+---
+
+### ✏️ Example Slack Message
+
+> *New High-Value Bounty Alert!*
+>
+> **Title:** Build a ChatGPT plugin
+> **Price:** \$1500
+> **Posted:** just now
+> **Description:** Short description here...
+>
+> 🔗 [View Full Bounty on Replit](https://replit.com/bounties/...)
+
+<img width="923" height="692" alt="image" src="https://github.com/user-attachments/assets/3a7ee29c-d34d-4799-9779-3f0ed2697e27" />
+
+---
+
+### 🛡 Security
+
+* Secrets like API keys and Slack webhook are stored in `.env` (included in `.gitignore`)
+* `/run-bot` endpoint can be protected with `CRON_SECRET` token
+
+---
+
+### 🛠 Built With
+
+* Python + Flask
+* Firecrawl API
+* Slack Incoming Webhooks
+* Vercel (serverless deployment)
+
+---
